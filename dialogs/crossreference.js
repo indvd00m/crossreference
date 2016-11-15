@@ -74,7 +74,7 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 
 	return {
 		title : editor.lang.crossreference.name,
-		minWidth : 300,
+		minWidth : 400,
 		minHeight : 150,
 		
 		onLoad : function() {
