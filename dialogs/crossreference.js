@@ -145,6 +145,8 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 			element.setAttribute('manual-name', manual.name);
 			element.setAttribute('manual-number', manual.number || '');
 			element.setAttribute('href', '#manual-' + manual.guid);
+			if (!element.hasClass('manual-reference'))
+				element.addClass('manual-reference');
 			
 			var text = 'Руководство: ';
 			if (config.showNumber && manual.number)

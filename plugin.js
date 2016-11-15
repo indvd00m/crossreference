@@ -19,7 +19,7 @@ CKEDITOR.plugins.add('crossreference', {
 		CKEDITOR.dialog.add(pluginName, this.path + 'dialogs/crossreference.js');
 
 		editor.addCommand(pluginName, new CKEDITOR.dialogCommand(pluginName, {
-			allowedContent : 'a[!manual-reference,manual-guid,manual-name,manual-number]{*}',
+			allowedContent : 'a[!manual-reference,manual-guid,manual-name,manual-number]{*}(manual-reference)',
 			requiredContent : 'a[manual-reference]'
 		}));
 		editor.on('doubleclick', function(evt) {
