@@ -6,6 +6,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 CKEDITOR.plugins.setLang("crossreference","en",{
 	'name': 'Reference to manual',
 	'description': 'Cross-reference link to manual',
-	"filterText":"Filter",
+	"filter":"Filter",
 	"manual":"Manual"
 });

@@ -6,6 +6,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 CKEDITOR.plugins.setLang("crossreference","ru",{
 	'name': 'Ссылка на руководство',
 	'description': 'Перекрёстная ссылка на руководство',
-	"filterText":"Фильтр",
+	"filter":"Фильтр",
 	"manual":"Руководство"
 });

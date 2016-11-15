@@ -34,18 +34,18 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 	}
 
 	var filterManuals = function(e) {
-		var filterText = dialog.getValueOf('tab-source', 'filterText');
-		if (filterText)
-			filterText = filterText.trim().toLowerCase();
+		var filter = dialog.getValueOf('tab-source', 'filter');
+		if (filter)
+			filter = filter.trim().toLowerCase();
 		else
-			filterText = '';
+			filter = '';
 		
 		var manualGuidSelect = dialog.getContentElement('tab-source', 'manualGuid');
 		var selectedGuid = null;
 		$('option', manualGuidSelect.$).each(function() {
 			var option = $(this);
 			var text = option.text();
-			if (filterText.length == 0 || text.toLowerCase().indexOf(filterText) != -1) {
+			if (filter.length == 0 || text.toLowerCase().indexOf(filter) != -1) {
 				option.removeAttr('disabled', 'disabled');
 				if (selectedGuid == null)
 					selectedGuid = option.val();
@@ -58,8 +58,8 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 
 	return {
 		title : editor.lang.crossreference.description,
-		minWidth : 450,
-		minHeight : 180,
+		minWidth : 300,
+		minHeight : 150,
 		
 		onLoad : function() {
 			var manualGuidSelect = this.getContentElement('tab-source', 'manualGuid');
@@ -107,7 +107,7 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 			if (!selectedElement || selectedElement.getName() !== 'a')
 				selectedElement = null;
 
-			dialog.setValueOf('tab-source', 'filterText', '');
+			dialog.setValueOf('tab-source', 'filter', '');
 			filterManuals();
 			
 			updateSelected();
@@ -119,12 +119,14 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 			var manual = findManual(manualGuid);
 			
 			var element = null;
-			if (selectedElement)
+			if (selectedElement) {
 				element = selectedElement;
-			else
+			} else {
 				element = editor.document.createElement('a');
+				editor.insertElement(element);
+			}
+			
 			element.setAttribute('manual-reference', '');
-
 			element.setAttribute('manual-guid', manual.guid);
 			element.setAttribute('manual-name', manual.name);
 			element.setAttribute('manual-number', manual.number || '');
@@ -135,10 +137,6 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 				text += manual.number + ' ';
 			text += manual.name;
 			element.setText(text);
-
-			if (!selectedElement)
-				editor.insertElement(element);
-
 		},
 
 		contents : [ 
@@ -152,9 +150,9 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 						children : [
 							{
 								type : 'text',
-								id : 'filterText',
+								id : 'filter',
 								width: '100%',
-								label : editor.lang.crossreference.filterText,
+								label : editor.lang.crossreference.filter,
 								onKeyUp : filterManuals
 							},
 							{
