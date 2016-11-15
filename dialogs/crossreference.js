@@ -2,11 +2,26 @@
  * Created by indvd00m - 14.11.2016.
  * Licensed under the terms of GPL, LGPL and MPL licenses.
  */
+// TODO fix double click in ie8
+
 CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 	
 	var defaultConfig = {
-		role: 'User',
-		showNumber: true
+		showNumber: true,
+		manualProvider: function(callback) {
+			callback([
+				{
+					guid: 'testGuid1',
+					number: '1.1',
+					name: 'Test name'
+				},
+				{
+					guid: 'testGuid2',
+					number: '1.2',
+					name: 'Test name 2'
+				},
+			]);
+		}
 	}
 	var config = CKEDITOR.tools.extend(defaultConfig, editor.config.crossreference || {}, true);
 
@@ -30,7 +45,8 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 				manualGuid = selectedElement.getAttribute('manual-guid');
 			}
 		}
-		dialog.setValueOf('tab-source', 'manualGuid', manualGuid);
+		if (dialog)
+			dialog.setValueOf('tab-source', 'manualGuid', manualGuid);
 	}
 
 	var filterManuals = function(e) {
@@ -65,12 +81,7 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 			var manualGuidSelect = this.getContentElement('tab-source', 'manualGuid');
 			manualGuidSelect.getInputElement().setStyle('width', '100%');
 			
-			jQuery.getJSON('api/manual-service', {
-				filter: JSON.stringify({
-					role: config.role
-				}),
-				loadText: false
-			}, function(data) {
+			config.manualProvider(function(data) {
 				manuals = data;
 				for (var i = 0; i < manuals.length; i++) {
 					var manual = manuals[i];
@@ -95,7 +106,7 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 				});
 				
 				updateSelected();
-			})
+			});
 		},
 		
 		onShow : function() {
@@ -117,6 +128,9 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 
 			var manualGuid = dialog.getValueOf('tab-source', 'manualGuid');
 			var manual = findManual(manualGuid);
+			
+			if (manual == null)
+				return;
 			
 			var element = null;
 			if (selectedElement) {
