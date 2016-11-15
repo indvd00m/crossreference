@@ -19,7 +19,7 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 					guid: 'testGuid2',
 					number: '1.2',
 					name: 'Test name 2'
-				},
+				}
 			]);
 		}
 	}
