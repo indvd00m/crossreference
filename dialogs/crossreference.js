@@ -112,9 +112,13 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 		onShow : function() {
 			dialog = this;
 
-			selectedElement = editor.getSelection();
-			if (selectedElement)
-				selectedElement = selectedElement.getSelectedElement();
+			var selection = editor.getSelection();
+			if (selection) {
+				if (selection.getType() == CKEDITOR.SELECTION_ELEMENT)
+					selectedElement = selection.getSelectedElement();
+				else if (selection.getType() == CKEDITOR.SELECTION_TEXT) // ie8 fix
+					selectedElement = selection.getStartElement();
+			}
 			if (!selectedElement || selectedElement.getName() !== 'a')
 				selectedElement = null;
 
