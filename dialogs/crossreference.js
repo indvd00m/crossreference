@@ -73,7 +73,7 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 	};
 
 	return {
-		title : editor.lang.crossreference.description,
+		title : editor.lang.crossreference.name,
 		minWidth : 300,
 		minHeight : 150,
 		
@@ -164,6 +164,11 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 						type : 'vbox',
 						widths : [ '100%' ],
 						children : [
+							{
+								type : 'html',
+								id : 'description',
+								html : '<div style="white-space: normal; text-align: justify;">' + editor.lang.crossreference.description + '</div>',
+							},
 							{
 								type : 'text',
 								id : 'filter',
