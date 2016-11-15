@@ -2,7 +2,6 @@
  * Created by indvd00m - 14.11.2016.
  * Licensed under the terms of GPL, LGPL and MPL licenses.
  */
-// TODO fix double click in ie8
 
 CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 	
