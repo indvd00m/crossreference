@@ -12,12 +12,14 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 				{
 					guid: 'testGuid1',
 					number: '1.1',
-					name: 'Test name'
+					name: 'Test name',
+					level: 0
 				},
 				{
 					guid: 'testGuid2',
 					number: '1.2',
-					name: 'Test name 2'
+					name: 'Test name 2',
+					level: 0
 				}
 			]);
 		}
