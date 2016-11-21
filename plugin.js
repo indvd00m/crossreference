@@ -1,8 +1,3 @@
-/*
- * CrossReference Plugin for CKEditor (http://github.com/indvd00m/crossreference)
- * Created by indvd00m - 14.11.2016.
- * Licensed under the terms of GPL, LGPL and MPL licenses.
- */
 CKEDITOR.plugins.add('crossreference', {
 	lang : [ 'en', 'ru' ],
 	requires : 'dialog',

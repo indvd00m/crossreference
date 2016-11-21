@@ -1,8 +1,6 @@
 CrossReference Plugin for CKEditor 4
 =================================
 
-Created by indvd00m - 14.11.2016.
-
 Adds cross references links.
 
 Icon: https://icons8.com/web-app/21440/User-Manual
@@ -11,7 +9,7 @@ Icon: https://icons8.com/web-app/21440/User-Manual
 
 ## Installation
 
- 1. Download the plugin from http://github.com/indvd00m/crossreference
+ 1. Download the plugin.
  
  2. Extract (decompress) the downloaded file into the plugins folder of your
 	CKEditor installation.

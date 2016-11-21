@@ -5,8 +5,6 @@ CrossReference Plugin for CKEditor - Adds images from local client as base64
 string into the source without server side processing. You can also add
 external image urls into the source.
 
-Created by indvd00m - 14.11.2016.
-
 Licensed under the terms of any of the following licenses at your
 choice:
 
