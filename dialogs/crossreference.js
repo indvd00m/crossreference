@@ -84,7 +84,7 @@ CKEDITOR.dialog.add('crossreferenceDialog', function(editor) {
 					
 					var key = '';
 					for (var j = 0; j < manual.level; j++)
-						key += '&nbsp;&nbsp;&nbsp;&nbsp;';
+						key += '&nbsp;&nbsp;';
 					if (manual.number)
 						key += manual.number + ' ';
 					key += manual.name;
