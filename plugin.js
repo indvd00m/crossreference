@@ -284,13 +284,8 @@ CKEDITOR.plugins.add('crossreference', {
 					return;
 				}
 				
-				if (type.anchorsProvider !== 'default') {
-					type.anchorsProvider(callback, editor);
-					return;
-				}
-				
 				var number = null;
-				if (type.numeration.enabled)
+				if (type.numeration && type.numeration.enabled)
 					number = type.numeration.firstNumber + '';
 				var html = editor.document.getDocumentElement().$;
 				$('a[cross-reference="' + type.type + '"][cross-anchor]', html).each(function() {
@@ -303,11 +298,15 @@ CKEDITOR.plugins.add('crossreference', {
 						text: element.text()
 					}
 					anchors.push(anchor);
-					if (type.numeration.enabled)
+					if (type.numeration && type.numeration.enabled)
 						number = type.numeration.increase(number);
 				});
 				
-				callback(anchors);
+				if (type.anchorsProvider !== 'default') {
+					type.anchorsProvider(callback, anchors, editor);
+				} else {
+					callback(anchors);
+				}
 			};
 			
 			config.formatText = function(template, anchor) {
