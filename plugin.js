@@ -199,6 +199,7 @@ CKEDITOR.plugins.add('crossreference', {
 		
 		function getConfig() {
 			var defaultConfig = {
+				activeTypes: ['chapter', 'image', 'table', 'reference'],
 				overrideTypes: false,
 				types: {}
 			};
@@ -273,6 +274,11 @@ CKEDITOR.plugins.add('crossreference', {
 			for (var typeName in config.types) {
 				var type = config.types[typeName];
 				type.type = typeName;
+			}
+			for (var typeName in config.types) {
+				if ($.inArray(typeName, config.activeTypes) == -1) {
+					delete config.types[typeName];
+				}
 			}
 			
 			// shared methods
