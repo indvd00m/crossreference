@@ -125,7 +125,7 @@ CKEDITOR.plugins.add('crossreference', {
 								
 								var linkText = config.formatText(type.linkTextTemplate, anchor);
 								linkElement.text(linkText);
-								linkElement.attr('title', anchorText);
+								linkElement.attr('title', anchorText.replace(/&nbsp;/g, ' ').trim());
 							});
 						}
 					});
