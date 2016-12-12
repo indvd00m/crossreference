@@ -24,7 +24,9 @@ Adds cross references links.
 ## Icons:
  
 https://icons8.com/web-app/15117/anchor
+
 https://icons8.com/web-app/38051/link
+
 https://icons8.com/web-app/21100/refresh
 
 ## License & Author
