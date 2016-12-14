@@ -47,7 +47,7 @@ CKEDITOR.dialog.add('crossreference-anchor-dialog', function(editor) {
 									for (var typeName in config.types) {
 										var type = config.types[typeName];
 										var label = type.name;
-										if (type.anchorsProvider != 'default')
+										if (type.allowCreateAnchors == false)
 											continue;
 										this.add(label, type.type);
 									}

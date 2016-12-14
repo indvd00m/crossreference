@@ -29,7 +29,8 @@ CKEDITOR.plugins.add('crossreference', {
 		editor.ui.add('crossreference', CKEDITOR.UI_MENUBUTTON, {
 			label : editor.lang.crossreference.name,
 			modes: {
-				wysiwyg: 1 
+				wysiwyg: 1,
+				source: 1 
 			},
 			toolbar : 'insert',
 			onMenu: function() {
@@ -37,58 +38,74 @@ CKEDITOR.plugins.add('crossreference', {
 				
 				var selection = editor.getSelection();
 				if (selection) {
-					var element = null;
-					if (selection.getType() == CKEDITOR.SELECTION_ELEMENT)
-						element = selection.getSelectedElement();
-					else if (selection.getType() == CKEDITOR.SELECTION_TEXT) // ie8 fix
-						element = selection.getStartElement();
+					var element = selection.getStartElement();
+					if (element)
+						element = element.getAscendant('a', true);
 					if (element && element.hasAttribute('cross-reference')) {
 						selectedElement = element;
 					}
 				}
 				
-				var state = getMenuState(selectedElement);
+				var state = getMenuState(selectedElement, true);
 				return state;
 			}
 		});
 		
 		// dialogs
 		
-		var updateCrossReferences = 'update-crossreferences';
-		var anchorDialog = 'crossreference-anchor-dialog';
-		var linkDialog = 'crossreference-link-dialog';
+		var updateCmdName = 'update-crossreferences';
+		var anchorDialogCmdName = 'crossreference-anchor-dialog';
+		var linkDialogCmdName = 'crossreference-link-dialog';
 		
-		CKEDITOR.dialog.add(anchorDialog, this.path + 'dialogs/crossreference-anchor.js');
-		CKEDITOR.dialog.add(linkDialog, this.path + 'dialogs/crossreference-link.js');
+		CKEDITOR.dialog.add(anchorDialogCmdName, this.path + 'dialogs/crossreference-anchor.js');
+		CKEDITOR.dialog.add(linkDialogCmdName, this.path + 'dialogs/crossreference-link.js');
 		
-		editor.addCommand(anchorDialog, new CKEDITOR.dialogCommand(anchorDialog, {
+		editor.addCommand(anchorDialogCmdName, new CKEDITOR.dialogCommand(anchorDialogCmdName, {
 			allowedContent: anchorAllowedContent,
 			requiredContent: anchorRequiredContent
 		}));
-		editor.addCommand(linkDialog, new CKEDITOR.dialogCommand(linkDialog, {
+		editor.addCommand(linkDialogCmdName, new CKEDITOR.dialogCommand(linkDialogCmdName, {
 			allowedContent: linkAllowedContent,
 			requiredContent: linkRequiredContent
 		}));
 
 		// commands
 		
-		editor.addCommand(updateCrossReferences, {
+		editor.addCommand(updateCmdName, {
+			async: true,
+			contextSensitive: false,
+			editorFocus: false,
+			modes: {
+				wysiwyg: 1,
+				source: 1
+			},
+			readOnly: true,
 			exec: function(editor) {
+				var cmd = this;
 				
-				var html = editor.document.getDocumentElement().$;
+				var typesCount = 0;
+				var processedTypesCount = 0;
+				for (var typeName in config.types) {
+					typesCount++;
+				}
+				
+				var html = null;
+				if (editor.mode == 'source')
+					html = $('<div>' + editor.getData() + '</div>');
+				else
+					html = $(editor.editable().$);
 				
 				for (var typeName in config.types) {
-					var type = config.types[typeName];
-					config.findAnchors(editor, type, function(anchors) {
+					config.findAnchors(config, editor, config.types[typeName], function(anchors) {
 						for (var i = 0; i < anchors.length; i++) {
 							var anchor = anchors[i];
+							var type = config.types[anchor.type];
 							
-							var aName = anchor.type + '-' + anchor.guid;
-							var anchorText = config.formatText(type.anchorTextTemplate, anchor);
+							var aName = type.type + '-' + anchor.guid;
 							
 							var anchorElement = $('a[cross-reference="' + type.type + '"][cross-anchor][cross-guid="' + anchor.guid + '"]', html);
 							if (anchorElement.length > 0) {
-								anchorElement.attr('cross-reference', anchor.type);
+								anchorElement.attr('cross-reference', type.type);
 								anchorElement.attr('cross-anchor', '');
 								anchorElement.attr('cross-guid', anchor.guid);
 								anchorElement.attr('cross-name', anchor.name);
@@ -102,13 +119,13 @@ CKEDITOR.plugins.add('crossreference', {
 								anchorElement.removeAttr('cross-link');
 								anchorElement.removeClass('cross-link');
 								
-								anchorElement.text(anchorText);
+								anchorElement.text(anchor.text);
 							}
 							
 							$('a[cross-reference="' + type.type + '"][cross-link][cross-guid="' + anchor.guid + '"]', html).each(function() {
 								var linkElement = $(this);
 								
-								linkElement.attr('cross-reference', anchor.type);
+								linkElement.attr('cross-reference', type.type);
 								linkElement.attr('cross-link', '');
 								linkElement.attr('cross-guid', anchor.guid);
 								linkElement.attr('cross-name', anchor.name);
@@ -123,9 +140,22 @@ CKEDITOR.plugins.add('crossreference', {
 								linkElement.removeAttr('cross-anchor');
 								linkElement.removeClass('cross-anchor');
 								
-								var linkText = config.formatText(type.linkTextTemplate, anchor);
+								var linkText = anchor.text;
+								if (type.linkTextTemplate)
+									linkText = config.formatText(type.linkTextTemplate, anchor);
 								linkElement.text(linkText);
-								linkElement.attr('title', anchorText.replace(/&nbsp;/g, ' ').trim());
+								linkElement.attr('title', anchor.text.replace(/&nbsp;/g, ' ').trim());
+							});
+						}
+						processedTypesCount++;
+						if (processedTypesCount >= typesCount) {
+							// done
+							if (editor.mode == 'source')
+								editor.setData(html.html());
+							editor.fire('afterCommandExec', {
+								name: updateCmdName,
+								command: cmd,
+								returnValue: true
 							});
 						}
 					});
@@ -137,51 +167,57 @@ CKEDITOR.plugins.add('crossreference', {
 					&& evt.data.element.hasAttribute('cross-reference')) {
 				editor.getSelection().selectElement(evt.data.element);
 				if (evt.data.element.hasAttribute('cross-anchor')) {
-					evt.data.dialog = anchorDialog;
+					evt.data.dialog = anchorDialogCmdName;
 				} else if (evt.data.element.hasAttribute('cross-link')) {
-					evt.data.dialog = linkDialog;
+					evt.data.dialog = linkDialogCmdName;
 				}
 			}
 		});
 		
 		// menu
 		
-		var getMenuState = function(element) {
-			var updateCrossReferencesState = CKEDITOR.TRISTATE_OFF;
-			var setCrossReferenceAnchorState = CKEDITOR.TRISTATE_OFF;
-			var setCrossReferenceLinkState = CKEDITOR.TRISTATE_OFF;
-			if (element && element.hasAttribute('cross-anchor')) {
-				setCrossReferenceAnchorState = CKEDITOR.TRISTATE_ON;
-				setCrossReferenceLinkState = CKEDITOR.TRISTATE_DISABLED;
+		var updateMenuItemName = 'updateCrossReferences';
+		var setAnchorMenuItemName = 'setCrossReferenceAnchor';
+		var setLinkMenuItemName = 'setCrossReferenceLink';
+		
+		var getMenuState = function(element, alwaysAllowEditItems) {
+			var items = {};
+			items[updateMenuItemName] = CKEDITOR.TRISTATE_OFF;
+			if (alwaysAllowEditItems == true) {
+				items[setAnchorMenuItemName] = CKEDITOR.TRISTATE_OFF;
+				items[setLinkMenuItemName] = CKEDITOR.TRISTATE_OFF;
 			}
-			if (element && element.hasAttribute('cross-link')) {
-				setCrossReferenceLinkState = CKEDITOR.TRISTATE_ON;
-				setCrossReferenceAnchorState = CKEDITOR.TRISTATE_DISABLED;
+			if (element && element.getName() === 'a' && element.hasAttribute('cross-reference')) {
+				items[setAnchorMenuItemName] = CKEDITOR.TRISTATE_OFF;
+				items[setLinkMenuItemName] = CKEDITOR.TRISTATE_OFF;
+				if (element.hasAttribute('cross-anchor')) {
+					items[setAnchorMenuItemName] = CKEDITOR.TRISTATE_ON;
+					items[setLinkMenuItemName] = CKEDITOR.TRISTATE_DISABLED;
+				}
+				if (element.hasAttribute('cross-link')) {
+					items[setAnchorMenuItemName] = CKEDITOR.TRISTATE_DISABLED;
+					items[setLinkMenuItemName] = CKEDITOR.TRISTATE_ON;
+				}
 			}
-			var items = {
-				updateCrossReferences: updateCrossReferencesState,
-				setCrossReferenceAnchor: setCrossReferenceAnchorState,
-				setCrossReferenceLink: setCrossReferenceLinkState,
-			};
 			return items;
 		}
 		if (editor.addMenuItem) {
 			editor.addMenuGroup('crossreferenceGroup');
-			editor.addMenuItem('updateCrossReferences', {
+			editor.addMenuItem(updateMenuItemName, {
 				label : editor.lang.crossreference.updateCrossReferences,
-				command : updateCrossReferences,
+				command : updateCmdName,
 				icon: this.path + 'icons/update.png',
 				group : 'crossreferenceGroup'
 			});
-			editor.addMenuItem('setCrossReferenceAnchor', {
+			editor.addMenuItem(setAnchorMenuItemName, {
 				label : editor.lang.crossreference.setCrossReferenceAnchor,
-				command : anchorDialog,
+				command : anchorDialogCmdName,
 				icon: this.path + 'icons/anchor.png',
 				group : 'crossreferenceGroup'
 			});
-			editor.addMenuItem('setCrossReferenceLink', {
+			editor.addMenuItem(setLinkMenuItemName, {
 				label : editor.lang.crossreference.setCrossReferenceLink,
-				command : linkDialog,
+				command : linkDialogCmdName,
 				icon: this.path + 'icons/link.png',
 				group : 'crossreferenceGroup'
 			});
@@ -190,10 +226,9 @@ CKEDITOR.plugins.add('crossreference', {
 			editor.contextMenu.addListener(function(element, selection) {
 				if (element.getName() === 'a' && element.hasAttribute('cross-reference')) {
 					selection.selectElement(element);
-					var state = getMenuState(element);
-					return state;
 				}
-				return null;
+				var state = getMenuState(element, false);
+				return state;
 			});
 		}
 		
@@ -215,7 +250,9 @@ CKEDITOR.plugins.add('crossreference', {
 						return ++n;
 					}
 				},
-				anchorsProvider: 'default'
+				anchorsProvider: 'default',
+				allowCreateAnchors: true,
+				groupAnchors: false
 			};
 			defaultConfig.types.image = {
 				name: editor.lang.crossreference.figure,
@@ -229,7 +266,9 @@ CKEDITOR.plugins.add('crossreference', {
 						return ++n;
 					}
 				},
-				anchorsProvider: 'default'
+				anchorsProvider: 'default',
+				allowCreateAnchors: true,
+				groupAnchors: false
 			};
 			defaultConfig.types.table = {
 				name: editor.lang.crossreference.table,
@@ -243,7 +282,9 @@ CKEDITOR.plugins.add('crossreference', {
 						return ++n;
 					}
 				},
-				anchorsProvider: 'default'
+				anchorsProvider: 'default',
+				allowCreateAnchors: true,
+				groupAnchors: false
 			};
 			defaultConfig.types.reference = {
 				name: editor.lang.crossreference.reference,
@@ -257,7 +298,9 @@ CKEDITOR.plugins.add('crossreference', {
 						return ++n;
 					}
 				},
-				anchorsProvider: 'default'
+				anchorsProvider: 'default',
+				allowCreateAnchors: true,
+				groupAnchors: false
 			};
 			
 			var config = CKEDITOR.tools.clone(defaultConfig);
@@ -282,7 +325,8 @@ CKEDITOR.plugins.add('crossreference', {
 			}
 			
 			// shared methods
-			config.findAnchors = function(editor, type, callback) {
+			
+			config.findAnchors = function(config, editor, type, callback) {
 				var anchors = [];
 				
 				if (type == null) {
@@ -293,7 +337,13 @@ CKEDITOR.plugins.add('crossreference', {
 				var number = null;
 				if (type.numeration && type.numeration.enabled)
 					number = type.numeration.firstNumber + '';
-				var html = editor.document.getDocumentElement().$;
+				
+				var html = null;
+				if (editor.mode == 'source')
+					html = $('<div>' + editor.getData() + '</div>');
+				else
+					html = $(editor.editable().$);
+				
 				$('a[cross-reference="' + type.type + '"][cross-anchor]', html).each(function() {
 					var element = $(this);
 					var anchor = {
@@ -308,10 +358,26 @@ CKEDITOR.plugins.add('crossreference', {
 						number = type.numeration.increase(number);
 				});
 				
-				if (type.anchorsProvider !== 'default') {
-					type.anchorsProvider(callback, anchors, editor);
-				} else {
+				function postProcessAnchors(anchors) {
+					for(var i = 0; i < anchors.length; i++) {
+						var anchor = anchors[i];
+						
+						if (anchor.type != type.type)
+							throw 'Incompatible type: ' + type.type;
+						
+						var text = anchor.name;
+						if (type.anchorTextTemplate) {
+							text = config.formatText(type.anchorTextTemplate, anchor);
+						}
+						anchor.text = text;
+					}
 					callback(anchors);
+				}
+				
+				if (type.anchorsProvider && type.anchorsProvider !== 'default') {
+					type.anchorsProvider(postProcessAnchors, anchors, type, editor);
+				} else {
+					postProcessAnchors(anchors);
 				}
 			};
 			
