@@ -4,6 +4,7 @@ CKEDITOR.plugins.setLang('crossreference','en',{
 	'anchorDescription': 'Anchor for cross-references. After save of anchor all cross-references links will be updated.',
 	'anchorType': 'Anchor type',
 	'anchorName': 'Name',
+	'anchorGroup': 'Anchor group',
 	'link': 'Cross-reference link',
 	'linkDescription': 'Cross-references link to an anchor',
 	'linkFilter':'Search / filter',

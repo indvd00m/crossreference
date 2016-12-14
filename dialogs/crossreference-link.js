@@ -3,23 +3,51 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 	var config = editor.config.crossreference;
 	
 	var updateAnchors = function(dialog) {
-		dialog.setValueOf('tab-main', 'filter', '');
-		
-		var anchorSelect = dialog.getContentElement('tab-main', 'anchor');
-		anchorSelect.clear();
-		anchorSelect.add('', '');
+		dialog.anchors = [];
+		dialog.anchorsByGuid = {};
+		dialog.anchorsGroupNameByGuid = {};
 		
 		var type = null;
 		var typeName = dialog.getValueOf('tab-main', 'type');
 		if (typeName)
 			type = config.types[typeName];
 		
-		config.findAnchors(editor, type, function(anchors) {
+		dialog.setValueOf('tab-main', 'filter', '');
+		
+		var anchorSelect = dialog.getContentElement('tab-main', 'anchor');
+		anchorSelect.clear();
+		anchorSelect.add('', '');
+		
+		var anchorGroupSelect = dialog.getContentElement('tab-main', 'anchorGroup');
+		anchorGroupSelect.clear();
+		anchorGroupSelect.add('', '');
+		if (type && type.groupAnchors == true)
+			anchorGroupSelect.getElement().show();
+		else
+			anchorGroupSelect.getElement().hide();
+		
+		config.findAnchors(config, editor, type, function(anchors) {
+			dialog.anchors = anchors;
+			dialog.anchorsByGuid = {};
+			dialog.anchorsGroupNameByGuid = {};
+			
 			for (var i = 0; i < anchors.length; i++) {
 				var anchor = anchors[i];
 				var guid = anchor.guid;
-				var label = config.formatText(type.anchorTextTemplate, anchor);
+				var label = anchor.text;
 				anchorSelect.add(label, guid);
+				
+				if (type.groupAnchors == true && anchor.groupGuid) {
+					dialog.anchorsGroupNameByGuid[anchor.groupGuid] = anchor.groupName;
+				}
+				dialog.anchorsByGuid[guid] = anchor;
+			}
+			
+			if (type && type.groupAnchors == true) {
+				for (var groupGuid in dialog.anchorsGroupNameByGuid) {
+					var groupName = dialog.anchorsGroupNameByGuid[groupGuid];
+					anchorGroupSelect.add(groupName, groupGuid);
+				}
 			}
 			
 			// fix &nbsp; and others
@@ -41,14 +69,33 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 		else
 			filter = '';
 		
+		var type = null;
+		var typeName = dialog.getValueOf('tab-main', 'type');
+		if (typeName)
+			type = config.types[typeName];
+		
+		var groupGuid = null;
+		if (type && type.groupAnchors == true)
+			groupGuid = dialog.getValueOf('tab-main', 'anchorGroup');
+		
 		var anchorSelect = dialog.getContentElement('tab-main', 'anchor');
+		var prevValue = anchorSelect.getValue();
 		var selected = null;
 		$('option', anchorSelect.getInputElement().$).each(function() {
 			var option = $(this);
+			var guid = option.val();
+			var anchor = dialog.anchorsByGuid[guid];
 			var text = option.text();
-			if (filter.length == 0 || text.toLowerCase().indexOf(filter) != -1) {
+			
+			var matches = filter.length == 0 || text.toLowerCase().indexOf(filter) != -1;
+			if (groupGuid)
+				matches = matches && anchor && anchor.groupGuid == groupGuid;
+			
+			if (matches) {
 				option.removeAttr('disabled', 'disabled');
 				if (selected == null)
+					selected = option.val();
+				else if (guid == prevValue)
 					selected = option.val();
 			} else {
 				option.attr('disabled', 'disabled');
@@ -99,6 +146,21 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 								},
 								commit: function(element) {
 									element.setAttribute('cross-reference', this.getValue());
+									element.setAttribute('cross-link', '');
+								}
+							},
+							{
+								type : 'select',
+								id : 'anchorGroup',
+								width: '100%',
+								label : editor.lang.crossreference.anchorGroup,
+								required: false,
+								items : [['']],
+								onLoad: function() {
+									this.getInputElement().setStyle('width', '100%');
+								},
+								onChange: function() {
+									filterAnchors(this.getDialog());
 								}
 							},
 							{

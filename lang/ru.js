@@ -4,6 +4,7 @@ CKEDITOR.plugins.setLang('crossreference','ru',{
 	'anchorDescription': 'Якорь, на который могут ссылаться перекрёстные ссылки. После сохранения якоря всё перекрёстные ссылки будут обновлены.',
 	'anchorType': 'Тип',
 	'anchorName': 'Наименование',
+	'anchorGroup': 'Раздел / группа',
 	'link': 'Перекрёстная ссылка',
 	'linkDescription': 'Перекрёстная ссылка на якорь.',
 	'linkFilter': 'Поиск / фильтр',
