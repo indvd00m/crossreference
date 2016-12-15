@@ -3,6 +3,10 @@ CrossReference Plugin for CKEditor 4
 
 Adds cross references links.
 
+## Requirements
+
+CrossReference Plugin require CKEditor 4.5+ version and dependent from plugins: dialog, notification.
+
 ## Installation
 
  1. Download the plugin.

@@ -1,6 +1,6 @@
 CKEDITOR.plugins.add('crossreference', {
 	lang : [ 'en', 'ru' ],
-	requires : 'dialog',
+	requires : 'dialog,notification',
 	icons : 'crossreference',
 	hidpi : true,
 	init : function(editor) {
@@ -81,6 +81,9 @@ CKEDITOR.plugins.add('crossreference', {
 			},
 			readOnly: true,
 			exec: function(editor) {
+				editor.setReadOnly(true);
+				var notification = editor.showNotification(editor.lang.crossreference.updatingCrossReferences, 'progress', 0);
+				
 				var cmd = this;
 				
 				var typesCount = 0;
@@ -88,6 +91,7 @@ CKEDITOR.plugins.add('crossreference', {
 				for (var typeName in config.types) {
 					typesCount++;
 				}
+				var linksCount = 0;
 				
 				var html = null;
 				if (editor.mode == 'source')
@@ -95,11 +99,36 @@ CKEDITOR.plugins.add('crossreference', {
 				else
 					html = $(editor.editable().$);
 				
+				function finishCommand() {
+					editor.setReadOnly(false);
+					editor.fire('afterCommandExec', {
+						name: updateCmdName,
+						command: cmd
+					});
+					notification.update({
+						type: 'success', 
+						message: editor.lang.crossreference.updatedCrossReferences + linksCount,
+						important: true
+					});
+				}
+				
+				if (typesCount == 0) {
+					finishCommand();
+					return;
+				}
+				
 				for (var typeName in config.types) {
 					config.findAnchors(config, editor, config.types[typeName], function(anchors) {
+						notification.update({
+							progress: (1 / typesCount) * processedTypesCount 
+						});
 						for (var i = 0; i < anchors.length; i++) {
 							var anchor = anchors[i];
 							var type = config.types[anchor.type];
+							
+							notification.update({
+								progress: (1 / typesCount) * processedTypesCount + (1 / typesCount / anchors.length) * i
+							});
 							
 							var aName = type.type + '-' + anchor.guid;
 							
@@ -145,6 +174,8 @@ CKEDITOR.plugins.add('crossreference', {
 									linkText = config.formatText(type.linkTextTemplate, anchor);
 								linkElement.text(linkText);
 								linkElement.attr('title', anchor.text.replace(/&nbsp;/g, ' ').trim());
+								
+								linksCount++;
 							});
 						}
 						processedTypesCount++;
@@ -152,11 +183,7 @@ CKEDITOR.plugins.add('crossreference', {
 							// done
 							if (editor.mode == 'source')
 								editor.setData(html.html());
-							editor.fire('afterCommandExec', {
-								name: updateCmdName,
-								command: cmd,
-								returnValue: true
-							});
+							finishCommand();
 						}
 					});
 				}

@@ -8,6 +8,8 @@ CKEDITOR.plugins.setLang('crossreference','ru',{
 	'link': 'Перекрёстная ссылка',
 	'linkDescription': 'Перекрёстная ссылка на якорь.',
 	'linkFilter': 'Поиск / фильтр',
+	'updatingCrossReferences': 'Обновление перекрёстных ссылок...',
+	'updatedCrossReferences': 'Обновлено перекрёстных ссылок: ',
 	'updateCrossReferences': 'Обновить перекрёстные ссылки',
 	'setCrossReferenceAnchor': 'Установить якорь для перекрёстных ссылок...',
 	'setCrossReferenceLink': 'Установить ссылку на якорь...',

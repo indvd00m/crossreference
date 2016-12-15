@@ -8,6 +8,8 @@ CKEDITOR.plugins.setLang('crossreference','en',{
 	'link': 'Cross-reference link',
 	'linkDescription': 'Cross-references link to an anchor',
 	'linkFilter':'Search / filter',
+	'updatingCrossReferences': 'Updating cross-references...',
+	'updatedCrossReferences': 'Updated cross-references: ',
 	'updateCrossReferences': 'Update cross-references',
 	'setCrossReferenceAnchor': 'Set anchor for cross-references...',
 	'setCrossReferenceLink': 'Set link to anchor...',

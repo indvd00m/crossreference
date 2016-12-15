@@ -3,6 +3,8 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 	var config = editor.config.crossreference;
 	
 	var updateAnchors = function(dialog) {
+		dialog.setState(CKEDITOR.DIALOG_STATE_BUSY);
+		
 		dialog.anchors = [];
 		dialog.anchorsByGuid = {};
 		dialog.anchorsGroupNameByGuid = {};
@@ -59,6 +61,8 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 			
 			if (!dialog.insertMode)
 				anchorSelect.setup(dialog.element);
+			
+			dialog.setState(CKEDITOR.DIALOG_STATE_IDLE);
 		});
 	};
 	
@@ -212,7 +216,9 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 				this.insertMode = false;
 			}
 			
-			if (!this.insertMode)
+			if (this.insertMode)
+				updateAnchors(this);
+			else
 				this.setupContent(this.element);
 		},
 		
