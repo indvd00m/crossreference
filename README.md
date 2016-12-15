@@ -1,35 +1,35 @@
 CrossReference Plugin for CKEditor 4
 =================================
 
-Adds cross references links with auto-numeration for chapters, images, tables and references. Other types of references can be defined in config.
+Adds cross references links with optional auto-numeration for chapters, images, tables and references. Other types of references can be defined in config.
 
 ## Description
 
 Two main conceptions - anchor and link to anchor. There are 4 type of references defined by default: chapter, image, table, reference. Example of anchor in raw html:
-```
+```html
 <a 
-	class='cross-reference cross-anchor' 
-	cross-reference='image' 
-	cross-anchor='' 
-	cross-guid='7d24373b-0756-481d-bf97-5a17ffdf3a28' 
-	cross-name='Experimental result' 
-	cross-number='1' 
-	name='image-7d24373b-0756-481d-bf97-5a17ffdf3a28'
+	class="cross-reference cross-anchor" 
+	cross-reference="image" 
+	cross-anchor="" 
+	cross-guid="7d24373b-0756-481d-bf97-5a17ffdf3a28" 
+	cross-name="Experimental result" 
+	cross-number="1" 
+	name="image-7d24373b-0756-481d-bf97-5a17ffdf3a28"
 	>
 		Fig. 1. Experimental result.
 </a>
 ```
 Example of link to this anchor in raw html:
-```
+```html
 <a 
-	class='cross-reference cross-link' 
-	cross-reference='image' 
-	cross-link='' 
-	cross-guid='7d24373b-0756-481d-bf97-5a17ffdf3a28' 
-	cross-name='Experimental result' 
-	cross-number='1' 
-	href='#image-7d24373b-0756-481d-bf97-5a17ffdf3a28' 
-	title='Fig. 1. Experimental result.'
+	class="cross-reference cross-link" 
+	cross-reference="image" 
+	cross-link="" 
+	cross-guid="7d24373b-0756-481d-bf97-5a17ffdf3a28" 
+	cross-name="Experimental result" 
+	cross-number="1" 
+	href="#image-7d24373b-0756-481d-bf97-5a17ffdf3a28" 
+	title="Fig. 1. Experimental result."
 	>
 		1
 </a>
@@ -119,36 +119,37 @@ You can switch which types is active by config option `config.crossreference.act
 | --- | --- | --- | --- |
 | `activeTypes` | Which type of anchors would be activated. | Array | `['chapter', 'image', 'table', 'reference']` |
 | `overrideTypes` | If you define your own types, enabling this option lead to mixing of your types with types from default config which not yet defined in your config. | Boolean | false |
-| `types` | Types definition. | Object | see #default-config |
+| `types` | Types definition. | Object | see [Default config](https://github.com/indvd00m/crossreference#default-config) section|
 
 ### Example of type definition
 
-```
-		image: {
-			name: 'Figure',
-			anchorTextTemplate: 'Fig. ${number}. ${name}.',
-			linkTextTemplate: '${number}',
-			numeration: {
-				enabled: true,
-				firstNumber: '1',
-				increase: function(number) {
-					var n = parseInt(number);
-					return ++n;
-				}
-			},
-			anchorsProvider: 'default',
-			allowCreateAnchors: true,
-			groupAnchors: false
+```javascript
+image: {
+	name: 'Figure',
+	anchorTextTemplate: 'Fig. ${number}. ${name}.',
+	linkTextTemplate: '${number}',
+	numeration: {
+		enabled: true,
+		firstNumber: '1',
+		increase: function(number) {
+			var n = parseInt(number);
+			return ++n;
 		}
+	},
+	anchorsProvider: 'default',
+	allowCreateAnchors: true,
+	groupAnchors: false
+}
 ```
 Type properties:
+
 | Property | Description | Type | Required |
 | --- | --- | --- | --- |
 | `name` | Type name. | String | Yes |
-| `anchorTextTemplate` | Template for anchor text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see #example-of-an-anchor-object section). | String | No |
-| `linkTextTemplate` | Template for link text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see #example-of-an-anchor-object section). | String | No |
-| `numeration` | Definition of type numeration. See #example-of-a-numeration-config section. | Object | No |
-| `anchorsProvider` | You can define your own anchors provider. By default plugin search anchors in content of editor and use this anchors for links. But if you want refer to anchors outside of editor (web page, etc) you can define another type of anchor with anchorsProvider function. See #example-of-type-with-anchors-provider section. | String 'default' or function | No |
+| `anchorTextTemplate` | Template for anchor text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see [Example of an anchor object](https://github.com/indvd00m/crossreference#example-of-an-anchor-object) section). | String | No |
+| `linkTextTemplate` | Template for link text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see [Example of an anchor object](https://github.com/indvd00m/crossreference#example-of-an-anchor-object) section). | String | No |
+| `numeration` | Definition of type numeration. See [Example of a numeration config](https://github.com/indvd00m/crossreference#example-of-a-numeration-config) section. | Object | No |
+| `anchorsProvider` | You can define your own anchors provider. By default plugin search anchors in content of editor and use this anchors for links. But if you want refer to anchors outside of editor (web page, etc) you can define another type of anchor with anchorsProvider function. See [Example of type with anchors provider](https://github.com/indvd00m/crossreference#example-of-type-with-anchors-provider) section. | String 'default' or function | No |
 | `allowCreateAnchors` | Can user create anchors of this type in anchors dialog. | Boolean | No |
 | `groupAnchors` | If `true`, anchors can be filtered by group in link dialog. | Boolean | No |
 
@@ -156,7 +157,7 @@ Type properties:
 
 JSON object:
 
-```
+```javascript
 {
 	type: 'image',
 	guid: '7d24373b-0756-481d-bf97-5a17ffdf3a28',
@@ -172,7 +173,7 @@ JSON object:
 | `type` | Type name of this anchor (`config.types.typeName`). | String | Yes |
 | `guid` | Unique guid of this anchor. | String | Yes |
 | `name` | Name of this anchor. | String | Yes |
-| `number` | Number of this anchor (if type contains numeration definition). | String | Yes/No |
+| `number` | Number of this anchor (if type contains numeration definition). | String | Depends of type |
 | `text` | Text of this anchor. Optional property because of text will generated by `type.anchorTextTemplate`. | String | No |
 | `groupName` | Name of anchor group. | String | No |
 | `groupGuid` | Unique guid of anchor group. | String | No |
@@ -180,7 +181,7 @@ JSON object:
 
 ### Example of a numeration config
 
-```
+```javascript
 numeration: {
 	enabled: true,
 	firstNumber: '1',
@@ -198,7 +199,7 @@ numeration: {
 
 ### Example of type with anchors provider
 
-```
+```javascript
 webPage: {
 	name: 'Web page',
 	anchorTextTemplate: '${name}',
