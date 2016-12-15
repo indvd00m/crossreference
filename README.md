@@ -114,7 +114,6 @@ You can switch which types is active by config option `config.crossreference.act
 	}
 }
 ```
-
 | Property | Description | Type | Default value |
 | --- | --- | --- | --- |
 | `activeTypes` | Which type of anchors would be activated. | Array | `['chapter', 'image', 'table', 'reference']` |
@@ -142,7 +141,6 @@ image: {
 }
 ```
 Type properties:
-
 | Property | Description | Type | Required |
 | --- | --- | --- | --- |
 | `name` | Type name. | String | Yes |
@@ -183,7 +181,7 @@ JSON object:
 	number: '1',
 	text: 'Fig. 1. Experimental result.',
 	groupName: 'Group name',
-	groupGuid: 'Group guid'
+	groupGuid: '6c848dff-cde3-421f-b926-695c8de37d80'
 }
 ```
 | Property | Description | Type | Required |
@@ -217,8 +215,8 @@ webPage: {
 	allowCreateAnchors: false,
 	groupAnchors: false
 },
-`anchorsProvider` method attributes:
 ```
+`anchorsProvider` method attributes:
 | Name | Description | Type |
 | --- | --- | --- |
 | `callback` | Callback method which must be called with arrays of anchors as argument. | Function |
