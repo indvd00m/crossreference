@@ -247,7 +247,9 @@ CrossReference Plugin require CKEditor 4.5+ version and dependent from plugins: 
 See https://github.com/indvd00m/crossreference/issues.
 
 ## Icons:
- 
+
+https://icons8.com/web-app/21792/unicast
+
 https://icons8.com/web-app/15117/anchor
 
 https://icons8.com/web-app/38051/link
