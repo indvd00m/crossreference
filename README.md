@@ -5,7 +5,7 @@ Adds cross references links with optional auto-numeration for chapters, images, 
 
 ## Description
 
-Two main conceptions - anchor and link to anchor. There are 4 type of references defined by default: chapter, image, table, reference. Example of anchor in raw html:
+Two main conceptions - anchor and link to anchor. There are 4 type of references defined by default: chapter, image, table, reference. Example of anchor of type `image` in raw html:
 ```html
 <a 
 	class="cross-reference cross-anchor" 
