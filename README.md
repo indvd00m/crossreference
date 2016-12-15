@@ -243,10 +243,7 @@ CrossReference Plugin require CKEditor 4.5+ version and dependent from plugins: 
 
 ## Roadmap
 
- - Edit types dialog.
- - Hierarchical numeration of types.
- - List of enabled types in config.
- - Icon of anchor in editor.
+See https://github.com/indvd00m/crossreference/issues.
 
 ## Icons:
  
