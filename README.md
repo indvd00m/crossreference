@@ -195,21 +195,20 @@ JSON object:
 
 ### Example of type with anchors provider
 
-You can define your own anchors provider. By default plugin search anchors in content of editor and use this anchors for links. But if you want refer to anchors outside of editor (web page, etc) you can define another type of anchor with `anchorsProvider` function.
+You can define your own anchors provider. By default plugin search anchors in content of editor and use this anchors for links. But if you want refer to anchors outside of editor you can define another type of anchor with `anchorsProvider` function.
 
 ```javascript
-webPage: {
-	name: 'Web page',
+typeWithAnchorProfiver: {
+	name: 'My type',
 	anchorTextTemplate: '${name}',
 	linkTextTemplate: '${name}',
 	anchorsProvider: function(callback, editorAnchors, type, editor) {
 		var anchors = [];
 		anchors.push({
-			type: 'image',
+			type: 'typeWithAnchorProfiver',
 			guid: '7d24373b-0756-481d-bf97-5a17ffdf3a28',
-			name: 'Experimental result',
-			number: '1',
-			text: 'Fig. 1. Experimental result.'
+			name: 'Anchor name',
+			number: '1'
 		});
 		callback(anchors);
 	},
@@ -223,8 +222,8 @@ webPage: {
 | Name | Description | Type |
 | --- | --- | --- |
 | `callback` | Callback method which must be called with arrays of anchors as argument. | Function |
-| `editorAnchors` | Anchors of this type (`webPage` in this case) which already contains in editor. You can merge this anchors with your own anchors if need. | Array |
-| `type` | Type definition (Object `webPage` in this case). | Object |
+| `editorAnchors` | Anchors of this type (`typeWithAnchorProfiver` in this case) which already contains in editor. You can merge this anchors with your own anchors if need. | Array |
+| `type` | Type definition (Object `typeWithAnchorProfiver` in this case). | Object |
 | `editor` | Instance of ckeditor. | Object |
 
 
