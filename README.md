@@ -140,7 +140,6 @@ image: {
 	groupAnchors: false
 }
 ```
-Type properties:
 | Property | Description | Type | Required |
 | --- | --- | --- | --- |
 | `name` | Type name. | String | Yes |
