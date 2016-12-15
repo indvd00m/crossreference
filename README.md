@@ -198,14 +198,14 @@ JSON object:
 You can define your own anchors provider. By default plugin search anchors in content of editor and use this anchors for links. But if you want refer to anchors outside of editor you can define another type of anchor with `anchorsProvider` function.
 
 ```javascript
-typeWithAnchorProfiver: {
+myType: {
 	name: 'My type',
 	anchorTextTemplate: '${name}',
 	linkTextTemplate: '${name}',
 	anchorsProvider: function(callback, editorAnchors, type, editor) {
 		var anchors = [];
 		anchors.push({
-			type: 'typeWithAnchorProfiver',
+			type: 'myType',
 			guid: '7d24373b-0756-481d-bf97-5a17ffdf3a28',
 			name: 'Anchor name',
 			number: '1'
@@ -222,8 +222,8 @@ typeWithAnchorProfiver: {
 | Name | Description | Type |
 | --- | --- | --- |
 | `callback` | Callback method which must be called with arrays of anchors as argument. | Function |
-| `editorAnchors` | Anchors of this type (`typeWithAnchorProfiver` in this case) which already contains in editor. You can merge this anchors with your own anchors if need. | Array |
-| `type` | Type definition (Object `typeWithAnchorProfiver` in this case). | Object |
+| `editorAnchors` | Anchors of this type (`myType` in this case) which already contains in editor. You can merge this anchors with your own anchors if need. | Array |
+| `type` | Type definition (Object `myType` in this case). | Object |
 | `editor` | Instance of ckeditor. | Object |
 
 
