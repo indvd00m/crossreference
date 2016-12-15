@@ -233,7 +233,7 @@ CrossReference Plugin require CKEditor 4.5+ version and dependent from plugins: 
 
 ## Installation
 
- 1. Download the plugin.
+ 1. Download the plugin: https://github.com/indvd00m/crossreference/releases.
  
  2. Extract (decompress) the downloaded file into the plugins folder of your
 	CKEditor installation.
