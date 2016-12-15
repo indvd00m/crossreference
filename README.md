@@ -146,7 +146,7 @@ image: {
 | `anchorTextTemplate` | Template for anchor text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see [Example of an anchor object](https://github.com/indvd00m/crossreference#example-of-an-anchor-object) section). | String | No |
 | `linkTextTemplate` | Template for link text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see [Example of an anchor object](https://github.com/indvd00m/crossreference#example-of-an-anchor-object) section). | String | No |
 | `numeration` | Definition of type numeration. See [Example of a numeration config](https://github.com/indvd00m/crossreference#example-of-a-numeration-config) section. | Object | No |
-| `anchorsProvider` | You can define your own anchors provider. By default plugin search anchors in content of editor and use this anchors for links. But if you want refer to anchors outside of editor (web page, etc) you can define another type of anchor with anchorsProvider function. See [Example of type with anchors provider](https://github.com/indvd00m/crossreference#example-of-type-with-anchors-provider) section. | String 'default' or function | No |
+| `anchorsProvider` | See [Example of type with anchors provider](https://github.com/indvd00m/crossreference#example-of-type-with-anchors-provider) section. | String 'default' or function | No |
 | `allowCreateAnchors` | Can user create anchors of this type in anchors dialog. | Boolean | No |
 | `groupAnchors` | If `true`, anchors can be filtered by group in link dialog. | Boolean | No |
 
@@ -194,6 +194,8 @@ JSON object:
 | `groupGuid` | Unique guid of anchor group. | String | No |
 
 ### Example of type with anchors provider
+
+You can define your own anchors provider. By default plugin search anchors in content of editor and use this anchors for links. But if you want refer to anchors outside of editor (web page, etc) you can define another type of anchor with `anchorsProvider` function.
 
 ```javascript
 webPage: {
