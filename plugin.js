@@ -428,6 +428,7 @@ CKEDITOR.plugins.add('crossreference', {
 					text = text.replace(/\$\{levelShift\}/g, shift);
 				}
 				
+				text = text.replace(/\s+/g, ' ');
 				text = text.trim();
 				
 				return text;
