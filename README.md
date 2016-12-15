@@ -215,7 +215,9 @@ webPage: {
 	groupAnchors: false
 },
 ```
+
 `anchorsProvider` method attributes:
+
 | Name | Description | Type |
 | --- | --- | --- |
 | `callback` | Callback method which must be called with arrays of anchors as argument. | Function |
