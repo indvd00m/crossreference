@@ -145,7 +145,7 @@ image: {
 | `name` | Type name. | String | Yes |
 | `anchorTextTemplate` | Template for anchor text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see [Example of an anchor object](https://github.com/indvd00m/crossreference#example-of-an-anchor-object) section). | String | No |
 | `linkTextTemplate` | Template for link text. This text will be put in `a` tag. You can use variables in format `${variableName}`. Variables is a properties of an anchor object (see [Example of an anchor object](https://github.com/indvd00m/crossreference#example-of-an-anchor-object) section). | String | No |
-| `numeration` | Definition of type numeration. See [Example of a numeration config](https://github.com/indvd00m/crossreference#example-of-a-numeration-config) section. | Object | No |
+| `numeration` | Definition of type numeration. See [Example of a numeration config](https://github.com/indvd00m/crossreference#example-of-a-numeration-definition) section. | Object | No |
 | `anchorsProvider` | See [Example of type with anchors provider](https://github.com/indvd00m/crossreference#example-of-type-with-anchors-provider) section. | String 'default' or function | No |
 | `allowCreateAnchors` | Can user create anchors of this type in anchors dialog. | Boolean | No |
 | `groupAnchors` | If `true`, anchors can be filtered by group in link dialog. | Boolean | No |
