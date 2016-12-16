@@ -1,7 +1,7 @@
 CKEDITOR.plugins.add('crossreference', {
 	lang : [ 'en', 'ru' ],
 	requires : 'dialog,notification',
-	icons : 'crossreference',
+	icons : 'crossreference,anchor,link,update',
 	hidpi : true,
 	init : function(editor) {
 		
