@@ -3,6 +3,10 @@ CrossReference Plugin for CKEditor 4
 
 Adds cross references links with optional auto-numeration for chapters, images, tables and references. Other types of references can be defined in config.
 
+## Online demo
+
+Try the plugin demo at <http://indvd00m.com/crossreference/>.
+
 ## Description
 
 Two main conceptions - anchor and link to anchor. There are 4 type of references defined by default: chapter, image, table, reference. Example of anchor of type `image` in raw html:
