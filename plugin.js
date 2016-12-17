@@ -1,7 +1,7 @@
 CKEDITOR.plugins.add('crossreference', {
 	lang : [ 'en', 'ru' ],
 	requires : 'dialog,notification',
-	icons : 'crossreference,anchor,link,update',
+	icons : 'crossreference,crossreference-anchor,crossreference-link,crossreference-update',
 	hidpi : true,
 	init : function(editor) {
 		
@@ -233,19 +233,19 @@ CKEDITOR.plugins.add('crossreference', {
 			editor.addMenuItem(updateMenuItemName, {
 				label : editor.lang.crossreference.updateCrossReferences,
 				command : updateCmdName,
-				icon: this.path + 'icons/update.png',
+				icon: 'crossreference-update',
 				group : 'crossreferenceGroup'
 			});
 			editor.addMenuItem(setAnchorMenuItemName, {
 				label : editor.lang.crossreference.setCrossReferenceAnchor,
 				command : anchorDialogCmdName,
-				icon: this.path + 'icons/anchor.png',
+				icon: 'crossreference-anchor',
 				group : 'crossreferenceGroup'
 			});
 			editor.addMenuItem(setLinkMenuItemName, {
 				label : editor.lang.crossreference.setCrossReferenceLink,
 				command : linkDialogCmdName,
-				icon: this.path + 'icons/link.png',
+				icon: 'crossreference-link',
 				group : 'crossreferenceGroup'
 			});
 		}
