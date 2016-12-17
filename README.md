@@ -5,7 +5,7 @@ Adds cross references links with optional auto-numeration for chapters, images, 
 
 ## Online demo
 
-Try the plugin demo at <http://indvd00m.com/crossreference/>.
+Try the plugin demo at <http://indvd00m.com/crossreference-demo/>.
 
 ## Description
 
