@@ -11,6 +11,21 @@ Try the plugin demo at <http://indvd00m.com/crossreference-demo/>.
 
 http://ckeditor.com/addon/crossreference
 
+## Requirements
+
+CrossReference Plugin require CKEditor 4.5+ version and dependent from plugins: dialog, notification.
+
+## Installation
+
+ 1. Download the plugin: https://github.com/indvd00m/crossreference/releases.
+ 
+ 2. Extract (decompress) the downloaded file into the plugins folder of your
+	CKEditor installation.
+	Example: http://example.com/ckeditor/plugins/crossreference
+	
+ 3. Enable the plugin by using the extraPlugins configuration setting.
+	Example: CKEDITOR.config.extraPlugins = 'crossreference';
+
 ## Description
 
 Two main conceptions - anchor and link to anchor. There are 4 type of references defined by default: chapter, image, table, reference. Example of anchor of type `image` in raw html:
@@ -234,21 +249,6 @@ myType: {
 | `type` | Type definition (Object `myType` in this case). | Object |
 | `editor` | Instance of ckeditor. | Object |
 
-
-## Requirements
-
-CrossReference Plugin require CKEditor 4.5+ version and dependent from plugins: dialog, notification.
-
-## Installation
-
- 1. Download the plugin: https://github.com/indvd00m/crossreference/releases.
- 
- 2. Extract (decompress) the downloaded file into the plugins folder of your
-	CKEditor installation.
-	Example: http://example.com/ckeditor/plugins/crossreference
-	
- 3. Enable the plugin by using the extraPlugins configuration setting.
-	Example: CKEDITOR.config.extraPlugins = 'crossreference';
 
 ## Roadmap
 
