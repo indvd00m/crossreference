@@ -141,7 +141,7 @@ You can switch which types is active by config option `config.crossreference.act
 | --- | --- | --- | --- |
 | `activeTypes` | Which type of anchors would be activated. | Array | `['chapter', 'image', 'table', 'reference']` |
 | `overrideTypes` | If you define your own types, enabling this option lead to mixing of your types with types from default config which not yet defined in your config. | Boolean | false |
-| `types` | Types definition. | Object | see [Default config](https://github.com/indvd00m/crossreference#default-config) section|
+| `types` | Types definition. | Object | see [Example of type definition](https://github.com/indvd00m/crossreference#example-of-type-definition) section|
 
 ### Example of type definition
 
