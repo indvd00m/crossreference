@@ -88,7 +88,7 @@ CKEDITOR.dialog.add('crossreference-anchor-dialog', function(editor) {
 			this.element = selection.getStartElement();
 			if (this.element)
 				this.element = this.element.getAscendant('a', true);
-			if (!this.element || this.element.getName() != 'a') {
+			if (!this.element || this.element.getName() != 'a' || !this.element.hasAttribute('cross-anchor')) {
 				this.element = editor.document.createElement('a');
 				var guid = generateUUID();
 				this.element.setAttribute('cross-guid', guid);
@@ -97,7 +97,9 @@ CKEDITOR.dialog.add('crossreference-anchor-dialog', function(editor) {
 				this.insertMode = false;
 			}
 			
-			if (!this.insertMode)
+			if (this.insertMode)
+				this.setValueOf('tab-main', 'name', selection.getSelectedText().trim());
+			else
 				this.setupContent(this.element);
 		},
 		
