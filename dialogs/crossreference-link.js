@@ -14,8 +14,6 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 		if (typeName)
 			type = config.types[typeName];
 		
-		dialog.setValueOf('tab-main', 'filter', '');
-		
 		var anchorSelect = dialog.getContentElement('tab-main', 'anchor');
 		anchorSelect.clear();
 		anchorSelect.add('', '');
@@ -59,7 +57,9 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 				option.html(text);
 			});
 			
-			if (!dialog.insertMode)
+			if (dialog.insertMode)
+				filterAnchors(dialog);
+			else
 				anchorSelect.setup(dialog.element);
 			
 			dialog.setState(CKEDITOR.DIALOG_STATE_IDLE);
@@ -208,7 +208,7 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 			this.element = selection.getStartElement();
 			if (this.element)
 				this.element = this.element.getAscendant('a', true);
-			if (!this.element || this.element.getName() != 'a') {
+			if (!this.element || this.element.getName() != 'a' || !this.element.hasAttribute('cross-link')) {
 				this.element = editor.document.createElement('a');
 				this.element.setAttribute('cross-link', '');
 				this.insertMode = true;
@@ -216,9 +216,10 @@ CKEDITOR.dialog.add('crossreference-link-dialog', function(editor) {
 				this.insertMode = false;
 			}
 			
-			if (this.insertMode)
+			if (this.insertMode) {
+				this.setValueOf('tab-main', 'filter', selection.getSelectedText().trim());
 				updateAnchors(this);
-			else
+			} else
 				this.setupContent(this.element);
 		},
 		
