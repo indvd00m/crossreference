@@ -189,6 +189,15 @@ CKEDITOR.plugins.add('crossreference', {
 				}
 			}
 		});
+		
+		// keystrokes
+		
+		editor.setKeystroke(CKEDITOR.CTRL + CKEDITOR.SHIFT + 65, anchorDialogCmdName);
+		editor.setKeystroke(CKEDITOR.CTRL + CKEDITOR.SHIFT + 76, linkDialogCmdName);
+		editor.setKeystroke(CKEDITOR.CTRL + CKEDITOR.ALT + 85, updateCmdName);
+		
+		// double click
+		
 		editor.on('doubleclick', function(evt) {
 			if (evt.data.element && !evt.data.element.isReadOnly() && evt.data.element.getName() === 'a' 
 					&& evt.data.element.hasAttribute('cross-reference')) {
